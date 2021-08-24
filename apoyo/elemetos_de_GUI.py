@@ -256,7 +256,7 @@ class Cuadro(Frame):
         self.combo = ttk.Combobox(self.z, state="readonly", width=40)
         self.combo.grid(row = self.y, column = self.x, pady=4, padx=8)
         self.combo["values"] = self.listadesplegable
-        self.combo.set(self.listadesplegable[0])
+        self.combo.set(' ')
         self.lista_de_objetos.append((self.combo))
         self.lista_de_datos.append((self.combo))
 
