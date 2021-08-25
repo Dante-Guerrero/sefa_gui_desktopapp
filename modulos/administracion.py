@@ -1,7 +1,7 @@
 import datetime as dt
 from random import choice
 import pandas as pd
-from tkinter import Tk
+from tkinter import Tk, Frame
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
 from apoyo.vsf import Vitrina
@@ -65,23 +65,19 @@ class Administrar_usuarios(Ventana):
         """Constructor"""
 
         Ventana.__init__(self, *args)
-
-        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
-        tabla_de_usuarios = b2.generar_dataframe()
-
+        
         c1 = Cuadro(self)
         c1.agregar_label(0,0,' ')
         c1.agregar_imagen(1,0,'users.png',692,200)
         c1.agregar_titulo(2,0,'USUARIOS ACTIVOS')
         
-        if len(tabla_de_usuarios.index) > 0:
-            tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña'], axis=1)
-            v1 = Vitrina(self, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=850)
-        else:
-            c2 = Cuadro(self)
-            c2.agregar_label(0,0,' ')
-            c2.agregar_label(1,0,'0 usuarios creados')
-            c2.agregar_label(2,0,' ')
+        self.f1 = Frame(self)
+        self.f1.pack()
+        self.f2 = Frame(self.f1)
+        self.f2.pack()
+        
+        self.c2 = None
+        self.generar_vitrina()
 
         c3 = Cuadro(self)
         c3.agregar_button(0,0,'Crear usuario', self.ir_a_crear_usuario)
@@ -100,11 +96,9 @@ class Administrar_usuarios(Ventana):
         self.x = x
         texto_usuario = 'Usuario: ' + x
 
-        b1 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Usuario')
-        lb1 = b1.listar_datos_de_fila(self.x)
         b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Datos_de_usuario')
         lb2 = b2.listar_datos_de_fila(self.x)
-        lista_para_insertar = [lb1[3],lb2[1],lb2[2],lb2[4]]
+        lista_para_insertar = [lb2[1],lb2[2],lb2[3],lb2[5]]
         
         self.desaparecer()
         subframe = Pantalla_de_usuario(self, 500, 400, texto_usuario, nuevo=False, lista=lista_para_insertar, x=self.x)
@@ -114,6 +108,30 @@ class Administrar_usuarios(Ventana):
         """"""
 
         print(x)
+    
+    #----------------------------------------------------------------------
+    def generar_vitrina(self):
+        """"""
+
+        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+        tabla_de_usuarios = self.b2.generar_dataframe()
+        if len(tabla_de_usuarios.index) > 0:
+            tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña'], axis=1)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=1100)
+        else:
+            self.c2 = Cuadro(self.f2)
+            self.c2.agregar_label(0,0,' ')
+            self.c2.agregar_label(1,0,'0 usuarios creados')
+            self.c2.agregar_label(2,0,' ')
+
+    #----------------------------------------------------------------------
+    def actualizar_vitrina(self):
+        """"""
+
+        self.f2.destroy()
+        self.f2 = Frame(self.f1)
+        self.f2.pack()
+        self.generar_vitrina()
 
 class Pantalla_de_usuario(Ventana):
     """"""
@@ -159,7 +177,7 @@ class Pantalla_de_usuario(Ventana):
         else:
             self.x = x
             self.c3.agregar_button(1,0,'Guardar', self.guardar_cambios_usuario)
-        self.c3.agregar_button(1,1, 'Volver', self.volver)
+        self.c3.agregar_button(1,1, 'Volver', self.regresar_a_Administrar_usuarios)
     
     #----------------------------------------------------------------------
     def crear_nuevo_usuario(self):
@@ -202,6 +220,8 @@ class Pantalla_de_usuario(Ventana):
             lista_a_cargar_p3 = lista_a_cargar_p2 + [hora_de_creacion]
             self.b3.agregar_datos(lista_a_cargar_p3)
 
+            self.regresar_a_Administrar_usuarios()
+
     #----------------------------------------------------------------------
     def guardar_cambios_usuario(self):
         """"""
@@ -218,22 +238,39 @@ class Pantalla_de_usuario(Ventana):
         oficina = lista[3]
         
         lista_descargada_p2 = self.b2.listar_datos_de_fila(codigo)
-        contrasenna = lista_descargada_p2[5]
+        ultimo_correo = lista_descargada_p2[1]
+        contrasenna = lista_descargada_p2[6]
 
-        # Pestaña 1
+        # Comprobar email
 
-        self.b1.cambiar_un_dato_de_una_fila(codigo,4,correo)
+        if correo == ultimo_correo:
+            valor_de_comprobacion = False
+            
+        else:
+            valor_de_comprobacion = self.comprobar_correo(correo)
 
-        # Pestaña 2
+        if valor_de_comprobacion == True:
 
-        lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
-        self.b2.cambiar_los_datos_de_una_fila(codigo, lista_a_cargar_p2)
+            print('Ese correo ya ha sido registrado')
+        
+        else:
 
-        # Pestaña 3
+            # Pestaña 1
 
-        hora = str(dt.datetime.now())
-        lista_a_cargar_p3 = lista_a_cargar_p2 + [hora]
-        self.b3.agregar_datos(lista_a_cargar_p3)
+            self.b1.cambiar_un_dato_de_una_fila(codigo,4,correo)
+
+            # Pestaña 2
+
+            lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
+            self.b2.cambiar_los_datos_de_una_fila(codigo, lista_a_cargar_p2)
+
+            # Pestaña 3
+
+            hora = str(dt.datetime.now())
+            lista_a_cargar_p3 = lista_a_cargar_p2 + [hora]
+            self.b3.agregar_datos(lista_a_cargar_p3)
+
+            self.regresar_a_Administrar_usuarios()
 
     #----------------------------------------------------------------------
     def conectar_con_Google_Drive(self):
@@ -267,6 +304,14 @@ class Pantalla_de_usuario(Ventana):
             return True
         else:
             return False
+
+    #----------------------------------------------------------------------
+    def regresar_a_Administrar_usuarios(self):
+        """"""
+
+        self.volver()
+        self.ventana_anterior.actualizar_vitrina()
+
 
 
 

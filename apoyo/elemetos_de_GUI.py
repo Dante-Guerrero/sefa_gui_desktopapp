@@ -540,6 +540,16 @@ class Cuadro(Frame):
         for i, row in tabla_listas.iterrows():
             row[1].set(row[0])
 
+    #----------------------------------------------------------------------
+    def eliminar_cuadro(self):
+        """"""
+
+        if self.scrollable:
+            self.main_frame.destroy()
+        
+        else:
+            self.z.destroy()
+
 class MenuSefa():
 
     #----------------------------------------------------------------------

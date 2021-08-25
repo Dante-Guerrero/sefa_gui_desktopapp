@@ -236,3 +236,9 @@ class Vitrina(Frame):
 
         boton.bind('<Enter>', Pasar_sobre_boton)
         boton.bind('<Leave>', Dejar_boton)
+    
+    #----------------------------------------------------------------------
+    def eliminar_vitrina(self):
+        """"""
+        
+        self.main_frame.destroy()
