@@ -6,7 +6,10 @@
 - [x] Impedir repetir emails
 - [x] Volver automáticamente después de crear nuevo usuario
 - [x] Cargar tabla actualizada al volver después de crear nuevo usuario
-- [ ] Enviar email cuando se cree usuario
+- [x] Enviar email cuando se cree usuario
+- [ ] Mejorar iconos de los botones
+- [ ] Conectar con Menu
+- [ ] Desarrollar boton eliminar
 
 ## logueo
 
