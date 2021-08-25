@@ -175,22 +175,32 @@ class Pantalla_de_usuario(Ventana):
         oficina = lista[3]
         contrasenna = self.generador_de_contrasenna()
 
-        # Pestaña 1
+        # Comprobar email
 
-        self.b1.agregar_datos_generando_codigo(correo)
+        valor_de_comprobacion = self.comprobar_correo(correo)
 
-        # Pestaña 2
+        if valor_de_comprobacion == True:
 
-        lista_descargada_codigo = self.b1.listar_datos_de_fila(correo)
-        codigo = lista_descargada_codigo[0]
-        hora_de_creacion = lista_descargada_codigo[1]
-        lista_a_cargar_p2 = [codigo, nombres, apellidos, usuario, oficina, contrasenna]
-        self.b2.agregar_datos(lista_a_cargar_p2)
+            print('Ese correo ya ha sido registrado')
+        
+        else:
 
-        # Pestaña 3
+            # Pestaña 1
 
-        lista_a_cargar_p3 = lista_a_cargar_p2 + [hora_de_creacion]
-        self.b3.agregar_datos(lista_a_cargar_p3)
+            self.b1.agregar_datos_generando_codigo(correo)
+
+            # Pestaña 2
+
+            lista_descargada_codigo = self.b1.listar_datos_de_fila(correo)
+            codigo = lista_descargada_codigo[0]
+            hora_de_creacion = lista_descargada_codigo[1]
+            lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
+            self.b2.agregar_datos(lista_a_cargar_p2)
+
+            # Pestaña 3
+
+            lista_a_cargar_p3 = lista_a_cargar_p2 + [hora_de_creacion]
+            self.b3.agregar_datos(lista_a_cargar_p3)
 
     #----------------------------------------------------------------------
     def guardar_cambios_usuario(self):
@@ -216,7 +226,7 @@ class Pantalla_de_usuario(Ventana):
 
         # Pestaña 2
 
-        lista_a_cargar_p2 = [codigo, nombres, apellidos, usuario, oficina, contrasenna]
+        lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
         self.b2.cambiar_los_datos_de_una_fila(codigo, lista_a_cargar_p2)
 
         # Pestaña 3
@@ -244,7 +254,19 @@ class Pantalla_de_usuario(Ventana):
         p = p.join([choice(caracteres_posibles) for i in range(longitud)])
         return(p)
 
+    #----------------------------------------------------------------------
+    def comprobar_correo(self, correo):
+        """"""
 
+        self.correo = correo
+        self.conectar_con_Google_Drive()
+
+        cantidad_de_coincidencias = self.b1.contar_coincidencias(self.correo)
+
+        if cantidad_de_coincidencias != 0:
+            return True
+        else:
+            return False
 
 
 

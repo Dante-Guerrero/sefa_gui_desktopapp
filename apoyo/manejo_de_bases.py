@@ -32,6 +32,14 @@ class Base_de_datos():
         print(self.tabla)
 
     #----------------------------------------------------------------------
+    def contar_coincidencias(self, variable):
+        """[...]"""
+
+        self.variable = variable
+        lista_de_coincidencias = self.worksheet.findall(self.variable)
+        return len(lista_de_coincidencias)
+
+    #----------------------------------------------------------------------
     def identificar_fila_por_variable(self, variable):
         """[...]"""
 
