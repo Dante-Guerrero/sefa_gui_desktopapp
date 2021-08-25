@@ -21,3 +21,4 @@ fondo_encabezados_de_tabla = '#747475'
 tipo_de_letra_tabla = 'helvetica 11'
 fondo_valores_de_tabla = '#ffffff'
 
+

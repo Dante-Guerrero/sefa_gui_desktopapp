@@ -3,7 +3,7 @@ from random import choice
 import pandas as pd
 from tkinter import Tk, Frame
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
-from apoyo.manejo_de_bases import Base_de_datos
+from apoyo.manejo_de_bases import Base_de_datos, Correo_electronico
 from apoyo.vsf import Vitrina
 import apoyo.datos_frecuentes as dfrec
 
@@ -116,7 +116,7 @@ class Administrar_usuarios(Ventana):
         tabla_de_usuarios = self.b2.generar_dataframe()
         if len(tabla_de_usuarios.index) > 0:
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.funcion_de_prueba, self.funcion_de_prueba, height=120, width=1100)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.funcion_de_prueba, height=120, width=1100)
         else:
             self.c2 = Cuadro(self.f2)
             self.c2.agregar_label(0,0,' ')
@@ -131,6 +131,22 @@ class Administrar_usuarios(Ventana):
         self.f2 = Frame(self.f1)
         self.f2.pack()
         self.generar_vitrina()
+
+    #----------------------------------------------------------------------
+    def enviar_contrasenna_al_correo(self, x):
+        """"""
+
+        self.x = x
+        b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Datos_de_usuario')
+        lb2 = b2.listar_datos_de_fila(self.x)
+
+        correo = lb2[1]
+        contrasenna = lb2[6]
+        asunto = 'Recuperación de contraseña'
+        mensaje = 'Su contraseña es: ' + contrasenna
+
+        email = Correo_electronico(correo, asunto, mensaje)
+        email.enviar()
 
 class Pantalla_de_usuario(Ventana):
     """"""
