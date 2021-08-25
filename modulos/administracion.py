@@ -76,7 +76,6 @@ class Administrar_usuarios(Ventana):
         self.f2 = Frame(self.f1)
         self.f2.pack()
         
-        self.c2 = None
         self.generar_vitrina()
 
         c3 = Cuadro(self)
