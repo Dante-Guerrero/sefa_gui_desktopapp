@@ -9,8 +9,8 @@
 - [x] Enviar email cuando se cree usuario
 - [ ] Mejorar iconos de los botones
 - [ ] Conectar con Menú
-- [ ] Desarrollar botón eliminar
-- [ ] Corregir problema de filtrado después de eliminar
+- [x] Desarrollar botón eliminar
+- [x] Corregir problema de filtrado después de eliminar
 
 ## logueo
 
