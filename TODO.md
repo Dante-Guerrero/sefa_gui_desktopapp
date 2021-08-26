@@ -11,6 +11,7 @@
 - [ ] Conectar con Menú
 - [x] Desarrollar botón eliminar
 - [x] Corregir problema de filtrado después de eliminar
+- [ ] Pantalla para administrar eliminados
 
 ## logueo
 

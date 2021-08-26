@@ -81,13 +81,22 @@ class Administrar_usuarios(Ventana):
         c3 = Cuadro(self)
         c3.agregar_button(0,0,'Crear usuario', self.ir_a_crear_usuario)
         c3.agregar_button(0,1,'Menu principal', self.ir_a_crear_usuario)
+        c3.agregar_button(0,2,'Eliminados', self.ir_a_usuarios_eliminados)
     
     #----------------------------------------------------------------------
     def ir_a_crear_usuario(self):
         """"""
+        
         self.desaparecer()
         subframe = Pantalla_de_usuario(self, 500, 400, 'Nuevo usuario')
     
+    #----------------------------------------------------------------------
+    def ir_a_usuarios_eliminados(self):
+        """"""
+
+        self.desaparecer()
+        subframe = Administar_eliminados(self, 500, 1200, 'Usuarios eliminados')
+
     #----------------------------------------------------------------------
     def ver_usuario(self, x):
         """"""
@@ -141,7 +150,6 @@ class Administrar_usuarios(Ventana):
         tabla_de_usuarios = tabla_de_usuarios[tabla_de_usuarios['Estado'] == 'ACTIVO']
         
         if len(tabla_de_usuarios.index) > 0:
-            tabla_de_usuarios = tabla_de_usuarios[tabla_de_usuarios['Estado'] == 'ACTIVO']
             tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
             self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, height=120, width=1100)
         else:
@@ -338,8 +346,76 @@ class Pantalla_de_usuario(Ventana):
         self.volver()
         self.ventana_anterior.actualizar_vitrina()
 
+class Administar_eliminados(Ventana):
+    """"""
+    
+    #----------------------------------------------------------------------
+    def __init__(self, *args):
+        """Constructor"""
 
+        Ventana.__init__(self, *args)
+        
+        c1 = Cuadro(self)
+        c1.agregar_label(0,0,' ')
+        c1.agregar_imagen(1,0,'users.png',692,200)
+        c1.agregar_titulo(2,0,'USUARIOS ELIMINADOS')
+        
+        self.f1 = Frame(self)
+        self.f1.pack()
+        self.f2 = Frame(self.f1)
+        self.f2.pack()
+        
+        self.generar_vitrina()
 
+        c3 = Cuadro(self)
+        c3.agregar_button(0,0,'Volver', self.regresar_a_Administrar_usuarios)
+
+    #----------------------------------------------------------------------
+    def regresar_a_Administrar_usuarios(self):
+        """"""
+
+        self.volver()
+        self.ventana_anterior.actualizar_vitrina()
+    
+    #----------------------------------------------------------------------
+    def generar_vitrina(self):
+        """"""
+
+        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+        tabla_de_usuarios = self.b2.generar_dataframe()
+        tabla_de_usuarios = tabla_de_usuarios[tabla_de_usuarios['Estado'] == 'ELIMINADO']
+        
+        if len(tabla_de_usuarios.index) > 0:
+            tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.activar_usuario, self.activar_usuario, self.activar_usuario, height=120, width=1100)
+        else:
+            self.c2 = Cuadro(self.f2)
+            self.c2.agregar_label(0,0,' ')
+            self.c2.agregar_label(1,0,'0 usuarios eliminados')
+            self.c2.agregar_label(2,0,' ')
+
+    #----------------------------------------------------------------------
+    def actualizar_vitrina(self):
+        """"""
+
+        self.f2.destroy()
+        self.f2 = Frame(self.f1)
+        self.f2.pack()
+        self.generar_vitrina()
+    
+    #----------------------------------------------------------------------
+    def activar_usuario(self, x):
+        """"""
+
+        codigo = x
+        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Datos_de_usuario')
+        self.b3 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Historial')
+        self.b2.cambiar_un_dato_de_una_fila(codigo,8,'ACTIVO')
+        lista_descargada_p2 = self.b2.listar_datos_de_fila(codigo)
+        hora = str(dt.datetime.now())
+        lista_a_cargar_p3 = lista_descargada_p2 + [hora]
+        self.b3.agregar_datos(lista_a_cargar_p3)
+        self.actualizar_vitrina()
 
 
 
