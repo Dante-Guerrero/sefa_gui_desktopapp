@@ -8,8 +8,9 @@
 - [x] Cargar tabla actualizada al volver después de crear nuevo usuario
 - [x] Enviar email cuando se cree usuario
 - [ ] Mejorar iconos de los botones
-- [ ] Conectar con Menu
-- [ ] Desarrollar boton eliminar
+- [ ] Conectar con Menú
+- [ ] Desarrollar botón eliminar
+- [ ] Corregir problema de filtrado después de eliminar
 
 ## logueo
 

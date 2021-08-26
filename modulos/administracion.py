@@ -103,36 +103,6 @@ class Administrar_usuarios(Ventana):
         subframe = Pantalla_de_usuario(self, 500, 400, texto_usuario, nuevo=False, lista=lista_para_insertar, x=self.x)
     
     #----------------------------------------------------------------------
-    def funcion_de_prueba(self, x):
-        """"""
-
-        print(x)
-    
-    #----------------------------------------------------------------------
-    def generar_vitrina(self):
-        """"""
-
-        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
-        tabla_de_usuarios = self.b2.generar_dataframe()
-        if len(tabla_de_usuarios.index) > 0:
-            tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña'], axis=1)
-            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.funcion_de_prueba, height=120, width=1100)
-        else:
-            self.c2 = Cuadro(self.f2)
-            self.c2.agregar_label(0,0,' ')
-            self.c2.agregar_label(1,0,'0 usuarios creados')
-            self.c2.agregar_label(2,0,' ')
-
-    #----------------------------------------------------------------------
-    def actualizar_vitrina(self):
-        """"""
-
-        self.f2.destroy()
-        self.f2 = Frame(self.f1)
-        self.f2.pack()
-        self.generar_vitrina()
-
-    #----------------------------------------------------------------------
     def enviar_contrasenna_al_correo(self, x):
         """"""
 
@@ -147,6 +117,47 @@ class Administrar_usuarios(Ventana):
 
         email = Correo_electronico(correo, asunto, mensaje)
         email.enviar()
+
+    #----------------------------------------------------------------------
+    def eliminar_usuario(self, x):
+        """"""
+
+        codigo = x
+        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Datos_de_usuario')
+        self.b3 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY','Historial')
+        self.b2.cambiar_un_dato_de_una_fila(codigo,8,'ELIMINADO')
+        lista_descargada_p2 = self.b2.listar_datos_de_fila(codigo)
+        hora = str(dt.datetime.now())
+        lista_a_cargar_p3 = lista_descargada_p2 + [hora]
+        self.b3.agregar_datos(lista_a_cargar_p3)
+        self.actualizar_vitrina()
+    
+    #----------------------------------------------------------------------
+    def generar_vitrina(self):
+        """"""
+
+        self.b2 = Base_de_datos('12gzaAx7GkEUDjEmiJG693in8ADyCPxej5cUv9YA2vyY', 'Datos_de_usuario')
+        tabla_de_usuarios = self.b2.generar_dataframe()
+        tabla_de_usuarios = tabla_de_usuarios[tabla_de_usuarios['Estado'] == 'ACTIVO']
+        
+        if len(tabla_de_usuarios.index) > 0:
+            tabla_de_usuarios = tabla_de_usuarios[tabla_de_usuarios['Estado'] == 'ACTIVO']
+            tabla_de_usuarios = tabla_de_usuarios.drop(['Nombres', 'Apellidos', 'Contraseña', 'Estado'], axis=1)
+            self.v1 = Vitrina(self.f2, tabla_de_usuarios, self.ver_usuario, self.enviar_contrasenna_al_correo, self.eliminar_usuario, height=120, width=1100)
+        else:
+            self.c2 = Cuadro(self.f2)
+            self.c2.agregar_label(0,0,' ')
+            self.c2.agregar_label(1,0,'0 usuarios creados')
+            self.c2.agregar_label(2,0,' ')
+
+    #----------------------------------------------------------------------
+    def actualizar_vitrina(self):
+        """"""
+
+        self.f2.destroy()
+        self.f2 = Frame(self.f1)
+        self.f2.pack()
+        self.generar_vitrina()
 
 class Pantalla_de_usuario(Ventana):
     """"""
@@ -227,7 +238,7 @@ class Pantalla_de_usuario(Ventana):
             lista_descargada_codigo = self.b1.listar_datos_de_fila(correo)
             codigo = lista_descargada_codigo[0]
             hora_de_creacion = lista_descargada_codigo[1]
-            lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna]
+            lista_a_cargar_p2 = [codigo, correo, nombres, apellidos, usuario, oficina, contrasenna, 'ACTIVO']
             self.b2.agregar_datos(lista_a_cargar_p2)
 
             # Pestaña 3
