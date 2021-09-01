@@ -40,7 +40,7 @@ class Ingresar_contrasena_de_adminitrador(Ventana):
         """"""
         
         self.desaparecer()
-        subframe = Administrar_usuarios(self, 500, 1300, 'Interfaz para el control de usuarios')
+        subframe = Administrar_usuarios(self, 500, 1200, 'Interfaz para el control de usuarios')
 
     #----------------------------------------------------------------------
     def comprobar_datos_de_administrador(self):

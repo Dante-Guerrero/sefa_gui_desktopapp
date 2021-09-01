@@ -1,6 +1,5 @@
 from tkinter import Tk
 from modulos import logueo
-from modulos import administracion
 
 ########################################################################
 class Aplicacion(object):
@@ -14,7 +13,7 @@ class Aplicacion(object):
         self.root.withdraw()
         #subFrame = logueo.logueo1_Ingreso_de_usuario(self, 500, 500, "Ventana 1")
 
-        subFrame = administracion.Administrar_usuarios(self, 500,1200,'Permisos de administrador')
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 500,500,'Ingreso de usuario')
 
 #----------------------------------------------------------------------
 def main():

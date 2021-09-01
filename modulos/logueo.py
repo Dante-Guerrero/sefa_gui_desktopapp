@@ -2,6 +2,7 @@ import pandas as pd
 from tkinter import Tk
 from apoyo.elemetos_de_GUI import Cuadro, Ventana
 from apoyo.manejo_de_bases import Base_de_datos
+from modulos.administracion import Ingresar_contrasena_de_adminitrador as adm
 
 class logueo1_Ingreso_de_usuario(Ventana):
     """"""
@@ -20,9 +21,9 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c2 = Cuadro(self)
         rejilla = (
             ('L',0,0,'Correo electrónico:'),
-            ('E',0,1),
-            ('L',1,0, 'Contraseña:'),
-            ('E',1,1)
+            ('E',1,0),
+            ('L',2,0, 'Contraseña:'),
+            ('EP',3,0)
         )
         c2.agregar_rejilla(rejilla)
 
@@ -33,21 +34,28 @@ class logueo1_Ingreso_de_usuario(Ventana):
     def ingresar_a_la_aplicacion(self):
         """"""
 
-        print('Ingreso')
+        print('Ingresar a aplicación')
     
     #----------------------------------------------------------------------
     def ir_a_recuperar_contrasena(self):
         """"""
 
-        print('recuperar contraseña')
+        self.desaparecer()
+        subframe = logueo2_Recuperar_contrasena(self, 500, 500,'Recuperar contraseña')
 
     #----------------------------------------------------------------------
     def ir_a_cambiar_contrasena(self):
         """"""
 
-        print('cambiar contraseña')
+        self.desaparecer()
+        subframe = logueo3_Cambiar_contrasena(self, 500, 500,'Cambiar contraseña')
     
+    #----------------------------------------------------------------------
+    def ir_a_administracion(self):
+        """"""
 
+        self.desaparecer()
+        subframe = adm.Administrar_usuarios(self, 500,500,'Permisos de administrador')
 
 class logueo2_Recuperar_contrasena(Ventana):
     """"""
