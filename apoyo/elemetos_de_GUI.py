@@ -76,7 +76,6 @@ class Cuadro(Frame):
         self.lista_de_datos = []
 
     #----------------------------------------------------------------------
-    
     def agregar_titulo(self, y, x, texto):
         """Método de la clase Cuadro. \n
         Permite agregar un título centrado al Frame creado con la Clase Cuadro."""
@@ -109,6 +108,26 @@ class Cuadro(Frame):
         self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=4, padx=8)
         self.lista_de_objetos.append((self.etiqueta))
     
+    #----------------------------------------------------------------------
+    def agregar_button_label(self, y, x, texto, funcion):
+        """Método de la clase Cuadro. \n
+        Permite agregar texto que activa funciones al Frame creado con la Clase Cuadro."""
+
+        self.y = y
+        self.x = x
+        self.texto = texto
+        self.funcion = funcion
+
+        self.etiqueta = Label(
+            self.z, 
+            text= self.texto,
+            font= formato.tipo_de_letra
+            )
+        self.etiqueta.grid(row= self.y, column=self.x, sticky='news', pady=4, padx=8)
+        #self.etiqueta.bind("<Button-1>",lambda e,argumento=argumento:self.funcion)
+        self.etiqueta.bind("<Button-1>", self.funcion)
+        self.lista_de_objetos.append((self.etiqueta))
+
     #----------------------------------------------------------------------
     def agregar_button(self, y, x, texto, funcion):
         """Método de la clase Cuadro. \n
@@ -308,6 +327,10 @@ class Cuadro(Frame):
             if row[0] == 'L':
 
                 self.agregar_label(row[1], row[2], row[3])
+
+            elif row[0] == 'BL':
+
+                self.agregar_button_label(row[1], row[2], row[3], row[4])
 
             elif row[0] == 'I':
                 

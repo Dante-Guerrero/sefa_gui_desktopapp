@@ -28,7 +28,15 @@ class logueo1_Ingreso_de_usuario(Ventana):
         c2.agregar_rejilla(rejilla)
 
         c3 = Cuadro(self)
-        c3.agregar_button(0,0,'Ingresar', self.ingresar_a_la_aplicacion)
+        c3.agregar_label(0,0,' ')
+        c3.agregar_button(1,0,'Ingresar', self.ingresar_a_la_aplicacion)
+
+        c4 = Cuadro(self)
+        rejilla2 = (
+            ('BL',0,0,'Recuperar contraseña', self.ir_a_recuperar_contrasena),
+            ('BL',1,0,'Cambiar contraseña', self.ir_a_cambiar_contrasena)
+        )
+        c4.agregar_rejilla(rejilla2)
 
     #----------------------------------------------------------------------
     def ingresar_a_la_aplicacion(self):
@@ -37,14 +45,14 @@ class logueo1_Ingreso_de_usuario(Ventana):
         print('Ingresar a aplicación')
     
     #----------------------------------------------------------------------
-    def ir_a_recuperar_contrasena(self):
+    def ir_a_recuperar_contrasena(self, event):
         """"""
 
         self.desaparecer()
         subframe = logueo2_Recuperar_contrasena(self, 500, 500,'Recuperar contraseña')
 
     #----------------------------------------------------------------------
-    def ir_a_cambiar_contrasena(self):
+    def ir_a_cambiar_contrasena(self, event):
         """"""
 
         self.desaparecer()

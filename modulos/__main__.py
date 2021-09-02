@@ -11,9 +11,8 @@ class Aplicacion(object):
 
         self.root = parent
         self.root.withdraw()
-        #subFrame = logueo.logueo1_Ingreso_de_usuario(self, 500, 500, "Ventana 1")
 
-        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 500,500,'Ingreso de usuario')
+        subFrame = logueo.logueo1_Ingreso_de_usuario(self, 500, 400, 'Ingreso de usuario')
 
 #----------------------------------------------------------------------
 def main():
